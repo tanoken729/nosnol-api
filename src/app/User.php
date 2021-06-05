@@ -5,8 +5,9 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject; //追加
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject //追加
 {
     use Notifiable;
 
@@ -36,4 +37,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier()　 //追加
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()　 //追加
+    {
+        return [];
+    }
 }

@@ -20,3 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('test', function() {
     return response()->json(['name' => '山田太郎', 'gender' => '男','mail' => 'yamada@test.com']);
 });
+
+Route::prefix('v1')->group(function(){
+    Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
+        Route::post('login', 'AuthController@login')->name('login');;
+        Route::post('logout', 'AuthController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::get('me', 'AuthController@me');
+    });
+});
