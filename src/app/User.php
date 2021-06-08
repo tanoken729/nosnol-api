@@ -38,12 +38,12 @@ class User extends Authenticatable implements JWTSubject //追加
         'email_verified_at' => 'datetime',
     ];
 
-    public function getJWTIdentifier()　 //追加
+    public function getJWTIdentifier()  //追加
     {
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()　 //追加
+    public function getJWTCustomClaims()  //追加
     {
         return [];
     }
