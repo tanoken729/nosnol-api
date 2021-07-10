@@ -12,3 +12,4 @@ RUN apt-get update \
     && docker-php-ext-install pdo_mysql pdo_pgsql \
     && apt-get install -y vim
 WORKDIR /var/www/html
+COPY ./php.ini /usr/local/etc/php/php.ini
