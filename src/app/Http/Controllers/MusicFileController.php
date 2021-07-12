@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MusicFile;
+use Illuminate\Support\Facades\Storage;
 
 class MusicFileController extends Controller
 {
@@ -15,8 +16,12 @@ class MusicFileController extends Controller
     public function musicFileUpload(Request $request)
     {
         $music_file = new MusicFile;
-        $music_file->music_file = $request->music_file;
-        $music_file->cover_image = $request->cover_image;
+        // music_fileにファイル名をつけて保存
+        $file_name = $request->music_file->getClientOriginalName();
+        $music_file->music_file = Storage::putFileAs('public',$request->music_file, $file_name);
+        // cover_imagにファイル名をつけて保存
+        $file_name = $request->cover_image->getClientOriginalName();
+        $music_file->cover_image = Storage::putFileAs('public',$request->cover_image, $file_name);
         $music_file->title = $request->title;
         $music_file->genre = $request->genre;
         $music_file->emotions = $request->emotions;
