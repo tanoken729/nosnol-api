@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MusicFile extends Model
 {
+    // $fillable = ホワイトリストとして
     protected $fillable = [
         'music_file',
         'cover_image',
