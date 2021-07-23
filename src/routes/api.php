@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function(){
 // createメソッドを実行
 Route::group(["middleware" => "api"], function () {
     Route::post('/register', 'RegisterController@create'); // 追加
+    Route::get('/musicFileData', 'MusicFileController@index');
     Route::post('/musicFileUpload', 'MusicFileController@musicFileUpload'); // 追加
     // Route::group(['middleware' => ['jwt.auth']], function () {
     // });
