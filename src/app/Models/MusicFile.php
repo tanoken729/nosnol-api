@@ -14,5 +14,6 @@ class MusicFile extends Model
         'genre',
         'emotions',
         'user_id',
+        'user_name',
     ];
 }

@@ -35,6 +35,7 @@ class MusicFileController extends Controller
         $music_file->genre = $request->genre;
         $music_file->emotions = $request->emotions;
         $music_file->user_id = $request->user_id;
+        $music_file->user_name = $request->user_name;
         $music_file->save();
     }
 }
