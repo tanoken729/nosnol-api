@@ -14,6 +14,7 @@ class FollowController extends Controller
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
         // $followCount = User::where('followed_user_id', $user->id)->get();
         $follow_info = DB::table('users')
+                        ->where('users.id', '=', $user_id)
                         ->join('follows', 'users.id', '=', 'follows.following_id')
                         ->get();
         return response()->json(['followInfo' => $follow_info]);
