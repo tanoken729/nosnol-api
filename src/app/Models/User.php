@@ -47,4 +47,9 @@ class User extends Authenticatable implements JWTSubject //追加
     {
         return [];
     }
+
+    public function follows()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }
