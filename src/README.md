@@ -89,6 +89,8 @@ $ docker-compose build
 # dockerコンテナを起動する
 $ docker-compose up -d
 
+# サンプルのenvファイルをコピーし、.envファイルで必要な構成変更を行う
+$ cp .env.example .env
 ```
 
 下記URLにアクセスする
