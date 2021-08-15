@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class FollowController extends Controller
 {
-    public function getFollowInfo($user_id)
+    public function getFollowInfo($followed_id, $following_id)
     {
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
         // $followCount = User::where('followed_user_id', $user->id)->get();
         $follow_info = DB::table('users')
-                        ->where('users.id', '=', $user_id)
+                        ->where('users.id', '=', $following_id)
                         ->join('follows', 'users.id', '=', 'follows.following_id')
+                        ->where('follows.followed_id', '=', $followed_id)
+                        // ->join('follows', $followed_id, '=', 'follows.followed_id')
                         ->get();
         return response()->json(['followInfo' => $follow_info]);
     }
