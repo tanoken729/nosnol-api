@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Like;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class LikeController extends Controller
 {
@@ -12,12 +13,12 @@ class LikeController extends Controller
     {
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
         // $followCount = User::where('followed_user_id', $user->id)->get();
-        $follow_info = DB::table('users')
+        $like_info = DB::table('users')
                         ->where('users.id', '=', $user_id)
                         ->join('likes', 'users.id', '=', 'likes.user_id')
                         ->where('likes.music_file_id', '=', $music_file_id)
                         ->get();
-        return response()->json(['followInfo' => $follow_info]);
+        return response()->json(['likeInfo' => $like_info]);
     }
 
     public function like(Request $request)
