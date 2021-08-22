@@ -16,4 +16,9 @@ class MusicFile extends Model
         'user_id',
         'user_name',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
 }

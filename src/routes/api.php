@@ -38,6 +38,10 @@ Route::group(["middleware" => "api"], function () {
     Route::get('{followed_id}/{following_id}/getFollowInfo', 'FollowController@getFollowInfo');
     Route::post('/follow', 'FollowController@follow');
     Route::get('{followed_id}/{following_id}/unfollow', 'FollowController@unfollow');
+    
+    Route::get('{user_id}/{music_file_id}/getLikeInfo', 'LikeController@getLikeInfo');
+    Route::post('/like', 'LikeController@like');
+    Route::get('{user_id}/{music_file_id}/unlike', 'LikeController@unlike');
     // Route::group(['middleware' => ['jwt.auth']], function () {
     // });
 });
