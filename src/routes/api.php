@@ -46,6 +46,7 @@ Route::group(["middleware" => "api"], function () {
     Route::get('{user_id}/{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
     Route::post('/comment', 'CommentController@comment');
     Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
+    Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'RegisterController@musicDetailPageData');
     // Route::group(['middleware' => ['jwt.auth']], function () {
     // });
 });
