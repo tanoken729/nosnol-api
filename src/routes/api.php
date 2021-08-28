@@ -42,6 +42,10 @@ Route::group(["middleware" => "api"], function () {
     Route::get('{user_id}/{music_file_id}/getLikeInfo', 'LikeController@getLikeInfo');
     Route::post('/like', 'LikeController@like');
     Route::get('{user_id}/{music_file_id}/unlike', 'LikeController@unlike');
+
+    Route::get('{user_id}/{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
+    Route::post('/comment', 'CommentController@comment');
+    Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
     // Route::group(['middleware' => ['jwt.auth']], function () {
     // });
 });
