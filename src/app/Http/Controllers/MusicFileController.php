@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MusicFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MusicFileController extends Controller
@@ -12,6 +13,29 @@ class MusicFileController extends Controller
     {
         return MusicFile::all();
     }
+
+    public function musicDetailPageData($user_id, $music_file_id, $music_file_user_id)
+    {
+        // $followCount = User::where('followed_user_id', $user->id)->get();
+        $music_detail_page_data = DB::table('music_files')
+                        ->where('music_files.id', '=', $music_file_id)
+                        ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+                        ->leftJoin('follows', function ($join) use ($user_id){
+                            $join->on('users.id', '=', 'follows.followed_id')
+                                ->where('follows.following_id', '=', $user_id);
+                        })
+                        ->leftJoin('likes', function ($join) use ($user_id){
+                            $join->on('music_files.id', '=', 'likes.music_file_id')
+                                ->where('likes.user_id', '=', $user_id);
+                        })
+                        ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
+                        // ->leftJoin('users as users2', 'users2.id', '=', 'comments.user_id')
+                        // カラム指定
+                        // ->select('follows.followed_id as follow_button_states', 'likes.user_id as like_states', 'text', 'name')
+                        ->get();
+        return response()->json(['musicDetailPageData' => $music_detail_page_data]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
