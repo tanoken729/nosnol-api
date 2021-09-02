@@ -29,9 +29,15 @@ class MusicFileController extends Controller
                                 ->where('likes.user_id', '=', $user_id);
                         })
                         ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
-                        // ->leftJoin('users as users2', 'users2.id', '=', 'comments.user_id')
-                        // カラム指定
-                        // ->select('follows.followed_id as follow_button_states', 'likes.user_id as like_states', 'text', 'name')
+                        ->leftJoin('users as commenter', 'commenter.id', '=', 'comments.user_id')
+                        ->select(
+                            'follows.followed_id as followed_id',
+                            'likes.user_id as likes_user_id',
+                            'text',
+                            'comments.user_id as comments_user_id',
+                            'comments.created_at as comments_created_at',
+                            'commenter.name as commenter_name'
+                            )
                         ->get();
         return response()->json(['musicDetailPageData' => $music_detail_page_data]);
     }
