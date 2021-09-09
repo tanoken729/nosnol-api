@@ -16,7 +16,6 @@ class MusicFileController extends Controller
 
     public function musicDetailPageData($user_id, $music_file_id, $music_file_user_id)
     {
-        // $followCount = User::where('followed_user_id', $user->id)->get();
         $music_detail_page_data = DB::table('music_files')
                         ->where('music_files.id', '=', $music_file_id)
                         ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
@@ -40,6 +39,9 @@ class MusicFileController extends Controller
                             )
                         ->get();
         return response()->json(['musicDetailPageData' => $music_detail_page_data]);
+        // あとでいいね数も取得する
+        // $likesCount = count(User::where('followed_user_id', $user->id)->get());
+        // return response()->json(['likesCount' => $likesCount]);
     }
 
     /**
