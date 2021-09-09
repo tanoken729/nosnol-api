@@ -12,7 +12,7 @@ class LikeController extends Controller
     public function getLikeInfo($user_id, $music_file_id)
     {
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
-        // $followCount = User::where('followed_user_id', $user->id)->get();
+        // $likesCount = User::where('likesed_user_id', $user->id)->get();
         $like_info = DB::table('users')
                         ->where('users.id', '=', $user_id)
                         ->join('likes', 'users.id', '=', 'likes.user_id')
@@ -31,10 +31,10 @@ class LikeController extends Controller
     
     public function unlike($user_id, $music_file_id)
     {
-        $follow = Like::where('user_id', '=', $user_id)->where('music_file_id', '=', $music_file_id)->first();
-        $follow->delete();
-        // $followCount = count(FollowUser::where('followed_user_id', $user->id)->get());
+        $likes = Like::where('user_id', '=', $user_id)->where('music_file_id', '=', $music_file_id)->first();
+        $likes->delete();
+        // $likesCount = count(FollowUser::where('likesed_user_id', $user->id)->get());
 
-        // return response()->json(['followCount' => $followCount]);
+        // return response()->json(['likesCount' => $likesCount]);
     }
 }

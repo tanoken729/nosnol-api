@@ -13,11 +13,17 @@ class CommentController extends Controller
     {
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
         // $followCount = User::where('followed_user_id', $user->id)->get();
-        $comment_info = DB::table('users')
-                        ->where('users.id', '=', $user_id)
-                        ->join('comments', 'users.id', '=', 'comments.user_id')
-                        ->where('comments.music_file_id', '=', $music_file_id)
-                        ->get();
+        $comment_info = DB::table('music_files')
+                ->where('music_files.id', '=', $music_file_id)
+                ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
+                ->leftJoin('users as commenter', 'commenter.id', '=', 'comments.user_id')
+                ->select(
+                    'text',
+                    'comments.user_id as comments_user_id',
+                    'comments.created_at as comments_created_at',
+                    'commenter.name as commenter_name'
+                    )
+                ->get();
         return response()->json(['commentInfo' => $comment_info]);
     }
 
