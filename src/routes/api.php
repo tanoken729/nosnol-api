@@ -47,6 +47,10 @@ Route::group(["middleware" => "api"], function () {
     Route::post('/comment', 'CommentController@comment');
     Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
     Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'MusicFileController@musicDetailPageData');
+    Route::get('musicfile/musicFileFilterEmotionJoy', 'MusicFileController@musicFileFilterEmotionJoy');
+    Route::get('musicfile/musicFileFilterEmotionAngry', 'MusicFileController@musicFileFilterEmotionAngry');
+    Route::get('musicfile/musicFileFilterEmotionSorrow', 'MusicFileController@musicFileFilterEmotionSorrow');
+    Route::get('musicfile/musicFileFilterEmotionEasy', 'MusicFileController@musicFileFilterEmotionEasy');
     // Route::group(['middleware' => ['jwt.auth']], function () {
     // });
 });
