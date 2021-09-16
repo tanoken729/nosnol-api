@@ -24,6 +24,9 @@ class MusicFileController extends Controller
         if ($request->genre) {
             $filteredItems = $query->where('genre', $request->genre)->get();
         }
+        if ($request->title) {
+            $filteredItems = $query->where('title', 'like', "%$request->title%")->get();
+        }
         return response()->json(['items' => $filteredItems]);
     }
 
