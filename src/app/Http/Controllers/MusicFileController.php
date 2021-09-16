@@ -15,33 +15,16 @@ class MusicFileController extends Controller
         return response()->json(['items' => $items]);
     }
 
-    public function musicFileFilterEmotionJoy()
+    public function musicFileFilter(Request $request)
     {
-        $music_file_filter_emotion_joy = DB::table('music_files')
-                        ->where('music_files.emotions', '=', 'joy')
-                        ->get();
-        return response()->json(['items' => $music_file_filter_emotion_joy]);
-    }
-    public function musicFileFilterEmotionAngry()
-    {
-        $music_file_filter_emotion_angry = DB::table('music_files')
-                        ->where('music_files.emotions', '=', 'angry')
-                        ->get();
-        return response()->json(['items' => $music_file_filter_emotion_angry]);
-    }
-    public function musicFileFilterEmotionSorrow()
-    {
-        $music_file_filter_emotion_sorrow = DB::table('music_files')
-                        ->where('music_files.emotions', '=', 'sorrow')
-                        ->get();
-        return response()->json(['items' => $music_file_filter_emotion_sorrow]);
-    }
-    public function musicFileFilterEmotionEasy()
-    {
-        $music_file_filter_emotion_easy = DB::table('music_files')
-                        ->where('music_files.emotions', '=', 'easy')
-                        ->get();
-        return response()->json(['items' => $music_file_filter_emotion_easy]);
+        $query = MusicFile::query(); // queryだから且つとかなくても２つのemotion取得且つ、genre取得の場合のデータが取れる？
+        if ($request->emotion) {
+            $filteredItems = $query->where('emotions', $request->emotion)->get();
+        }
+        if ($request->genre) {
+            $filteredItems = $query->where('genre', $request->genre)->get();
+        }
+        return response()->json(['items' => $filteredItems]);
     }
 
     public function musicDetailPageData($user_id, $music_file_id, $music_file_user_id)

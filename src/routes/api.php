@@ -12,15 +12,17 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+// デフォルト
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// テスト
 Route::get('test', function() {
     return response()->json(['name' => '山田太郎', 'gender' => '男','mail' => 'yamada@test.com']);
 });
 
+// ログイン
 Route::prefix('v1')->group(function(){
     Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
         Route::post('login', 'AuthController@login')->name('login');
@@ -30,27 +32,34 @@ Route::prefix('v1')->group(function(){
     });
 });
 
-// createメソッドを実行
 Route::group(["middleware" => "api"], function () {
-    Route::post('/register', 'RegisterController@create'); // 追加
+    // 新規登録
+    Route::post('/register', 'RegisterController@create');
+
+    // トップページの音楽ファイル取得
     Route::get('/musicFileData', 'MusicFileController@index');
-    Route::post('/musicFileUpload', 'MusicFileController@musicFileUpload'); // 追加
+
+    // 音楽ファイルアップロード
+    Route::post('/musicFileUpload', 'MusicFileController@musicFileUpload');
+
+    // フォロー
     Route::get('{followed_id}/{following_id}/getFollowInfo', 'FollowController@getFollowInfo');
     Route::post('/follow', 'FollowController@follow');
     Route::get('{followed_id}/{following_id}/unfollow', 'FollowController@unfollow');
-    
+
+    // いいね
     Route::get('{user_id}/{music_file_id}/getLikeInfo', 'LikeController@getLikeInfo');
     Route::post('/like', 'LikeController@like');
     Route::get('{user_id}/{music_file_id}/unlike', 'LikeController@unlike');
 
+    // コメント
     Route::get('{user_id}/{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
     Route::post('/comment', 'CommentController@comment');
     Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
+
+    // ファイル詳細画面の情報取得
     Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'MusicFileController@musicDetailPageData');
-    Route::get('musicfile/musicFileFilterEmotionJoy', 'MusicFileController@musicFileFilterEmotionJoy');
-    Route::get('musicfile/musicFileFilterEmotionAngry', 'MusicFileController@musicFileFilterEmotionAngry');
-    Route::get('musicfile/musicFileFilterEmotionSorrow', 'MusicFileController@musicFileFilterEmotionSorrow');
-    Route::get('musicfile/musicFileFilterEmotionEasy', 'MusicFileController@musicFileFilterEmotionEasy');
-    // Route::group(['middleware' => ['jwt.auth']], function () {
-    // });
+
+    // 感情・ジャンル絞り込み
+    Route::get('musicFileFilter/emotion/genre', 'MusicFileController@musicFileFilter');
 });
