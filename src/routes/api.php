@@ -59,6 +59,8 @@ Route::group(["middleware" => "api"], function () {
 
     // ファイル詳細画面の情報取得
     Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'MusicFileController@musicDetailPageData');
+    // ユーザー詳細画面の情報取得
+    Route::get('{user_id}/userDetailPageData', 'RegisterController@userDetailPageData');
 
     // 感情・ジャンル絞り込み
     Route::get('musicFileFilter/emotion/genre/title', 'MusicFileController@musicFileFilter');
