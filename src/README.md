@@ -76,3 +76,23 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 開発環境の立ち上げ
+
+```bash
+# install dependencies
+$ npm install
+
+# dockerイメージを生成する
+$ docker-compose build
+
+# dockerコンテナを起動する
+$ docker-compose up -d
+
+# サンプルのenvファイルをコピーし、.envファイルで必要な構成変更を行う
+$ cp .env.example .env
+```
+
+下記URLにアクセスする
+
+- http://localhost:8000/

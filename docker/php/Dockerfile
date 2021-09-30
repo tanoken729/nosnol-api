@@ -9,5 +9,7 @@ unzip \
 vim
 RUN apt-get update \
     && apt-get install -y libpq-dev \
-    && docker-php-ext-install pdo_mysql pdo_pgsql
+    && docker-php-ext-install pdo_mysql pdo_pgsql \
+    && apt-get install -y vim
 WORKDIR /var/www/html
+COPY ./php.ini /usr/local/etc/php/php.ini
