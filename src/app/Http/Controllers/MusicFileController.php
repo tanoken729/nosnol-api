@@ -24,7 +24,7 @@ class MusicFileController extends Controller
         if ($request->genre) {
             $filteredItems = $query->where('genre', $request->genre)->get();
         }
-        if ($request->title) {
+        if ($request->has('title')) {
             $filteredItems = $query->where('title', 'like', "%$request->title%")->get();
         }
         return response()->json(['items' => $filteredItems]);
@@ -69,14 +69,20 @@ class MusicFileController extends Controller
     {
         $music_file = new MusicFile;
 
-        // music_fileにファイル名をつけて保存
+        // リクエストされてきたmusic_fileにファイル名をつけて保存
+        // 元々ついていたファイル名を保存するファイル名に設定
         $file_name = $request->file('music_file')->getClientOriginalName();
+        // public/mp3files配下に保存
         $include_public = Storage::putFileAs('public/mp3files', $request->file('music_file'), $file_name);
+        // public/部分をカット
         $music_file->music_file = str_replace('public/', '', $include_public);
         
-        // cover_imagにファイル名をつけて保存
+        // リクエストされてきたcover_imagにファイル名をつけて保存
+        // 元々ついていたファイル名を保存するファイル名に設定
         $file_name = $request->file('cover_image')->getClientOriginalName();
+        // public/images配下に保存
         $include_public = Storage::putFileAs('public/images', $request->file('cover_image'), $file_name);
+        // public/部分をカット
         $music_file->cover_image = str_replace('public/', '', $include_public);
 
         $music_file->title = $request->title;
