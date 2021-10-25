@@ -11,21 +11,69 @@ class MusicFileController extends Controller
 {
     public function index()
     {
-        $items = MusicFile::all();
+        $items = MusicFile::leftJoin('users', 'users.id', '=', 'music_files.user_id')
+        ->select(
+            'music_files.title',
+            'music_files.cover_image',
+            'music_files.music_file',
+            'music_files.user_id',
+            'music_files.id',
+            // music_filesにusersをjoinさせてuser_nameを取得
+            'users.name as user_name',
+            'users.description'
+            )
+        ->get();
         return response()->json(['items' => $items]);
     }
 
     public function musicFileFilter(Request $request)
     {
+        // userをjoinさせる？
         $query = MusicFile::query(); // queryだから且つとかなくても２つのemotion取得且つ、genre取得の場合のデータが取れる？
         if ($request->emotion) {
-            $filteredItems = $query->where('emotions', $request->emotion)->get();
+            $filteredItems = $query->where('emotions', $request->emotion)
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.discription'
+                )
+            ->get();
         }
         if ($request->genre) {
-            $filteredItems = $query->where('genre', $request->genre)->get();
+            $filteredItems = $query->where('genre', $request->genre)
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.discription'
+                )
+            ->get();
         }
         if ($request->has('title')) {
-            $filteredItems = $query->where('title', 'like', "%$request->title%")->get();
+            $filteredItems = $query->where('title', 'like', "%$request->title%")
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.discription'
+                )
+            ->get();
         }
         return response()->json(['items' => $filteredItems]);
     }
