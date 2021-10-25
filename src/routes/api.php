@@ -62,6 +62,11 @@ Route::group(["middleware" => "api"], function () {
     // ユーザー詳細画面の情報取得
     Route::get('{user_id}/userDetailPageData', 'RegisterController@userDetailPageData');
 
-    // 感情・ジャンル絞り込み
+    // 感情・ジャンル絞り込み、ファイル名検索（クエリパラメータで取得）
     Route::get('musicFileFilter/emotion/genre/title', 'MusicFileController@musicFileFilter');
+
+    // ログインユーザープロフィール編集画面の情報取得
+    Route::get('loginUserProfileData/{user_id}', 'RegisterController@getLoginUserProfileData');
+    // ログインユーザープロフィール更新（Routeにはputが提供されていないためpostでリクエストを行う）
+    Route::post('loginUserProfileData/{user_id}', 'RegisterController@updateLoginUserProfileData');
 });
