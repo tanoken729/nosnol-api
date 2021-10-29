@@ -144,4 +144,21 @@ class MusicFileController extends Controller
         $music_file->user_id = $request->user_id;
         $music_file->save();
     }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function musicFileDestroy(Request $request)
+    {
+        // 対象モデル取得
+        $music_file = MusicFile::find($request->id);
+        // s3のmp3ファイル削除
+        $music_file_file_name = $music_file->music_file;
+        Storage::disk('s3')->delete('musicFiles/', $music_file_file_name);
+        // s3の音声ファイルのカバー画像削除
+        $cover_image_file_name = $music_file->cover_image;
+        Storage::disk('s3')->delete('images/', $cover_image_file_name);
+        $music_file->delete();
+    }
 }

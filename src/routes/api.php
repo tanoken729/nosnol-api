@@ -69,4 +69,7 @@ Route::group(["middleware" => "api"], function () {
     Route::get('loginUserProfileData/{user_id}', 'RegisterController@getLoginUserProfileData');
     // ログインユーザープロフィール更新（Routeにはputが提供されていないためpostでリクエストを行う）
     Route::post('loginUserProfileData/{user_id}', 'RegisterController@updateLoginUserProfileData');
+
+    // 音楽ファイル削除
+    Route::post('deleteMusicfile', 'MusicFileController@musicFileDestroy');
 });
