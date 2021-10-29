@@ -89,4 +89,11 @@ class RegisterController extends Controller
         }
         $user->save();
     }
+
+    public function destroy(Request $request)
+    {
+        // 対象モデル取得
+        $music_file = User::find($request->id);
+        $music_file->delete();
+    }
 }

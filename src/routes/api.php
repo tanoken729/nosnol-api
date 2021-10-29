@@ -72,4 +72,7 @@ Route::group(["middleware" => "api"], function () {
 
     // 音楽ファイル削除
     Route::post('deleteMusicfile', 'MusicFileController@musicFileDestroy');
+
+    // 退会
+    Route::post('deleteUser', 'RegisterController@destroy');
 });
