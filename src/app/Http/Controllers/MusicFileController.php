@@ -41,7 +41,7 @@ class MusicFileController extends Controller
                 'music_files.id',
                 // music_filesにusersをjoinさせてuser_nameを取得
                 'users.name as user_name',
-                'users.discription'
+                'users.description'
                 )
             ->get();
         }
@@ -56,7 +56,7 @@ class MusicFileController extends Controller
                 'music_files.id',
                 // music_filesにusersをjoinさせてuser_nameを取得
                 'users.name as user_name',
-                'users.discription'
+                'users.description'
                 )
             ->get();
         }
@@ -71,7 +71,7 @@ class MusicFileController extends Controller
                 'music_files.id',
                 // music_filesにusersをjoinさせてuser_nameを取得
                 'users.name as user_name',
-                'users.discription'
+                'users.description'
                 )
             ->get();
         }
@@ -145,4 +145,3 @@ class MusicFileController extends Controller
         $music_file->save();
     }
 }
-
