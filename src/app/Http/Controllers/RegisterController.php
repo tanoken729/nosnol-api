@@ -35,6 +35,17 @@ class RegisterController extends Controller
         $user_detail_page_data = DB::table('users')
                         ->where('users.id', '=', $user_id)
                         ->join('music_files', 'music_files.user_id', '=', 'users.id')
+                        ->select(
+                            'music_files.title',
+                            'music_files.cover_image',
+                            'music_files.music_file',
+                            'music_files.user_id',
+                            'music_files.id',
+                            // music_filesにusersをjoinさせてuser_nameを取得
+                            'users.name as user_name',
+                            'users.user_icon',
+                            'users.description'
+                            )
                         ->get();
         return response()->json(['userDetailItems' => $user_detail_page_data]);
     }
