@@ -117,27 +117,31 @@ class MusicFileController extends Controller
     {
         $music_file = new MusicFile;
 
-        // リクエストされてきたmusic_fileにファイル名をつけて保存
-        // 元々ついていたファイル名を保存するファイル名に設定
+        // リクエストされてきたmusic_fileに元々ついていたファイル名をつけて保存
         $file_name = $request->file('music_file')->getClientOriginalName();
-        // public/mp3files配下に保存
-        $include_public = Storage::putFileAs('public/mp3files', $request->file('music_file'), $file_name);
-        // public/部分をカット
-        $music_file->music_file = str_replace('public/', '', $include_public);
+        // Storageに保存する場合
+            // public/mp3files配下に保存
+            // $include_public = Storage::putFileAs('public/mp3files', $request->file('music_file'), $file_name);
+            // public/部分をカット
+            // $music_file->music_file = str_replace('public/', '', $include_public);
+        // s3に保存する場合
+        $music_file->music_file = Storage::disk('s3')->putFileAs('musicFiles', $request->file('music_file'), $file_name, 'public');
         
         // リクエストされてきたcover_imagにファイル名をつけて保存
         // 元々ついていたファイル名を保存するファイル名に設定
         $file_name = $request->file('cover_image')->getClientOriginalName();
-        // public/images配下に保存
-        $include_public = Storage::putFileAs('public/images', $request->file('cover_image'), $file_name);
-        // public/部分をカット
-        $music_file->cover_image = str_replace('public/', '', $include_public);
+        // Storageに保存する場合
+            // public/images配下に保存
+            // $include_public = Storage::putFileAs('public/images', $request->file('cover_image'), $file_name);
+            // public/部分をカット
+            // $music_file->cover_image = str_replace('public/', '', $include_public);
+        // s3に保存する場合
+        $music_file->cover_image = Storage::disk('s3')->putFileAs('images', $request->file('cover_image'), $file_name, 'public');
 
         $music_file->title = $request->title;
         $music_file->genre = $request->genre;
         $music_file->emotions = $request->emotions;
         $music_file->user_id = $request->user_id;
-        $music_file->user_name = $request->user_name;
         $music_file->save();
     }
 }
