@@ -9,19 +9,20 @@ use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    public function getCommentInfo($user_id, $music_file_id)
+    public function getCommentInfo($music_file_id)
     {
         // ユーザーのデータを取得する際にフォローテーブルをjoinさせる
         // $followCount = User::where('followed_user_id', $user->id)->get();
         $comment_info = DB::table('music_files')
                 ->where('music_files.id', '=', $music_file_id)
                 ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
-                ->leftJoin('users as commenter', 'commenter.id', '=', 'comments.user_id')
+                ->leftJoin('users', 'users.id', '=', 'comments.user_id')
                 ->select(
                     'text',
                     'comments.user_id as comments_user_id',
                     'comments.created_at as comments_created_at',
-                    'commenter.name as commenter_name'
+                    'users.name as commenter_name',
+                    'users.user_icon as commenter_user_icon'
                     )
                 ->get();
         return response()->json(['commentInfo' => $comment_info]);

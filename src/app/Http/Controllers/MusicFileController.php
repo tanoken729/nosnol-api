@@ -20,7 +20,9 @@ class MusicFileController extends Controller
             'music_files.id',
             // music_filesにusersをjoinさせてuser_nameを取得
             'users.name as user_name',
-            'users.description'
+            'users.description',
+            // 詳細ページに該当ユーザーのアイコンも渡す
+            'users.user_icon'
             )
         ->get();
         return response()->json(['items' => $items]);
@@ -92,6 +94,7 @@ class MusicFileController extends Controller
                                 ->where('likes.user_id', '=', $user_id);
                         })
                         ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
+                        // usersが別テーブルとして扱われるためエイリアス（commenter）としてjoinする
                         ->leftJoin('users as commenter', 'commenter.id', '=', 'comments.user_id')
                         ->select(
                             'follows.followed_id as followed_id',
@@ -99,7 +102,8 @@ class MusicFileController extends Controller
                             'text',
                             'comments.user_id as comments_user_id',
                             'comments.created_at as comments_created_at',
-                            'commenter.name as commenter_name'
+                            'commenter.name as commenter_name',
+                            'commenter.user_icon as commenter_user_icon'
                             )
                         ->get();
         return response()->json(['musicDetailPageData' => $music_detail_page_data]);
