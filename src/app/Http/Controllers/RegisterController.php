@@ -66,16 +66,16 @@ class RegisterController extends Controller
 
         // user_iconの変更リクエストがあった場合は更新
             // Storageに保存する場合
-            // if ($request->file('user_icon')) {
-            //     $file_name = $request->file('user_icon')->getClientOriginalName();
-            //     $include_public = Storage::putFileAs('public/userIcons', $request->file('user_icon'), $file_name);
-            //     $user->user_icon = str_replace('public/', '', $include_public);
-            // }
-            // s3に保存する場合
             if ($request->file('user_icon')) {
                 $file_name = $request->file('user_icon')->getClientOriginalName();
-                $user->user_icon = Storage::disk('s3')->putFileAs('userIcons', $request->file('user_icon'), $file_name, 'public');
+                $include_public = Storage::putFileAs('public/userIcons', $request->file('user_icon'), $file_name);
+                $user->user_icon = str_replace('public/', '', $include_public);
             }
+            // s3に保存する場合
+            // if ($request->file('user_icon')) {
+            //     $file_name = $request->file('user_icon')->getClientOriginalName();
+            //     $user->user_icon = Storage::disk('s3')->putFileAs('userIcons', $request->file('user_icon'), $file_name, 'public');
+            // }
 
         // 自己紹介の入力があった場合は更新する
         if ($request->description) {
