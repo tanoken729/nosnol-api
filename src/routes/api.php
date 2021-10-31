@@ -42,26 +42,37 @@ Route::group(["middleware" => "api"], function () {
     // 音楽ファイルアップロード
     Route::post('/musicFileUpload', 'MusicFileController@musicFileUpload');
 
-    // フォロー
+    // フォロー（フォローアクション時）
     Route::get('{followed_id}/{following_id}/getFollowInfo', 'FollowController@getFollowInfo');
     Route::post('/follow', 'FollowController@follow');
     Route::get('{followed_id}/{following_id}/unfollow', 'FollowController@unfollow');
 
-    // いいね
+    // いいね（いいねアクション時）
     Route::get('{user_id}/{music_file_id}/getLikeInfo', 'LikeController@getLikeInfo');
     Route::post('/like', 'LikeController@like');
     Route::get('{user_id}/{music_file_id}/unlike', 'LikeController@unlike');
 
-    // コメント
-    Route::get('{user_id}/{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
+    // コメント（コメントアクション時）
+    Route::get('{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
     Route::post('/comment', 'CommentController@comment');
     Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
 
-    // ファイル詳細画面の情報取得
+    // ファイル詳細画面の情報取得（ファイル詳細初期表示時に実行される）
     Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'MusicFileController@musicDetailPageData');
     // ユーザー詳細画面の情報取得
     Route::get('{user_id}/userDetailPageData', 'RegisterController@userDetailPageData');
 
-    // 感情・ジャンル絞り込み
+    // 感情・ジャンル絞り込み、ファイル名検索（クエリパラメータで取得）
     Route::get('musicFileFilter/emotion/genre/title', 'MusicFileController@musicFileFilter');
+
+    // ログインユーザープロフィール編集画面の情報取得
+    Route::get('loginUserProfileData/{user_id}', 'RegisterController@getLoginUserProfileData');
+    // ログインユーザープロフィール更新（Routeにはputが提供されていないためpostでリクエストを行う）
+    Route::post('loginUserProfileData/{user_id}', 'RegisterController@updateLoginUserProfileData');
+
+    // 音楽ファイル削除
+    Route::post('deleteMusicfile', 'MusicFileController@musicFileDestroy');
+
+    // 退会
+    Route::post('deleteUser', 'RegisterController@destroy');
 });

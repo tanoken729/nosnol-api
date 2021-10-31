@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration
+class CreateMusicFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,22 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('music_files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('text');
+            $table->binary('music_file');
+            $table->string('cover_image');
+            $table->string('title');
+            $table->string('genre');
+            $table->string('emotions');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('music_file_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
                   ->references('id')->on('users')
-                  ->OnDelete('cascade');
-            $table->foreign('music_file_id')
-                  ->references('id')->on('music_files')
-                  ->OnDelete('cascade');
-
+                  ->onDelete('cascade');
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -36,6 +36,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('music_files');
     }
 }

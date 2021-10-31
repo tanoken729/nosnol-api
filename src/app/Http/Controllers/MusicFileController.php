@@ -11,21 +11,71 @@ class MusicFileController extends Controller
 {
     public function index()
     {
-        $items = MusicFile::all();
+        $items = MusicFile::leftJoin('users', 'users.id', '=', 'music_files.user_id')
+        ->select(
+            'music_files.title',
+            'music_files.cover_image',
+            'music_files.music_file',
+            'music_files.user_id',
+            'music_files.id',
+            // music_filesにusersをjoinさせてuser_nameを取得
+            'users.name as user_name',
+            'users.description',
+            // 詳細ページに該当ユーザーのアイコンも渡す
+            'users.user_icon'
+            )
+        ->get();
         return response()->json(['items' => $items]);
     }
 
     public function musicFileFilter(Request $request)
     {
+        // userをjoinさせる？
         $query = MusicFile::query(); // queryだから且つとかなくても２つのemotion取得且つ、genre取得の場合のデータが取れる？
         if ($request->emotion) {
-            $filteredItems = $query->where('emotions', $request->emotion)->get();
+            $filteredItems = $query->where('emotions', $request->emotion)
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.description'
+                )
+            ->get();
         }
         if ($request->genre) {
-            $filteredItems = $query->where('genre', $request->genre)->get();
+            $filteredItems = $query->where('genre', $request->genre)
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.description'
+                )
+            ->get();
         }
         if ($request->has('title')) {
-            $filteredItems = $query->where('title', 'like', "%$request->title%")->get();
+            $filteredItems = $query->where('title', 'like', "%$request->title%")
+            ->leftJoin('users', 'users.id', '=', 'music_files.user_id')
+            ->select(
+                'music_files.title',
+                'music_files.cover_image',
+                'music_files.music_file',
+                'music_files.user_id',
+                'music_files.id',
+                // music_filesにusersをjoinさせてuser_nameを取得
+                'users.name as user_name',
+                'users.description'
+                )
+            ->get();
         }
         return response()->json(['items' => $filteredItems]);
     }
@@ -44,6 +94,7 @@ class MusicFileController extends Controller
                                 ->where('likes.user_id', '=', $user_id);
                         })
                         ->leftJoin('comments', 'comments.music_file_id', '=', 'music_files.id')
+                        // usersが別テーブルとして扱われるためエイリアス（commenter）としてjoinする
                         ->leftJoin('users as commenter', 'commenter.id', '=', 'comments.user_id')
                         ->select(
                             'follows.followed_id as followed_id',
@@ -51,7 +102,8 @@ class MusicFileController extends Controller
                             'text',
                             'comments.user_id as comments_user_id',
                             'comments.created_at as comments_created_at',
-                            'commenter.name as commenter_name'
+                            'commenter.name as commenter_name',
+                            'commenter.user_icon as commenter_user_icon'
                             )
                         ->get();
         return response()->json(['musicDetailPageData' => $music_detail_page_data]);
@@ -69,28 +121,48 @@ class MusicFileController extends Controller
     {
         $music_file = new MusicFile;
 
-        // リクエストされてきたmusic_fileにファイル名をつけて保存
-        // 元々ついていたファイル名を保存するファイル名に設定
+        // リクエストされてきたmusic_fileに元々ついていたファイル名をつけて保存
         $file_name = $request->file('music_file')->getClientOriginalName();
-        // public/mp3files配下に保存
-        $include_public = Storage::putFileAs('public/mp3files', $request->file('music_file'), $file_name);
-        // public/部分をカット
-        $music_file->music_file = str_replace('public/', '', $include_public);
+        // Storageに保存する場合
+            // public/mp3files配下に保存
+            // $include_public = Storage::putFileAs('public/mp3files', $request->file('music_file'), $file_name);
+            // public/部分をカット
+            // $music_file->music_file = str_replace('public/', '', $include_public);
+        // s3に保存する場合
+        $music_file->music_file = Storage::disk('s3')->putFileAs('musicFiles', $request->file('music_file'), $file_name, 'public');
         
         // リクエストされてきたcover_imagにファイル名をつけて保存
         // 元々ついていたファイル名を保存するファイル名に設定
         $file_name = $request->file('cover_image')->getClientOriginalName();
-        // public/images配下に保存
-        $include_public = Storage::putFileAs('public/images', $request->file('cover_image'), $file_name);
-        // public/部分をカット
-        $music_file->cover_image = str_replace('public/', '', $include_public);
+        // Storageに保存する場合
+            // public/images配下に保存
+            // $include_public = Storage::putFileAs('public/images', $request->file('cover_image'), $file_name);
+            // public/部分をカット
+            // $music_file->cover_image = str_replace('public/', '', $include_public);
+        // s3に保存する場合
+        $music_file->cover_image = Storage::disk('s3')->putFileAs('images', $request->file('cover_image'), $file_name, 'public');
 
         $music_file->title = $request->title;
         $music_file->genre = $request->genre;
         $music_file->emotions = $request->emotions;
         $music_file->user_id = $request->user_id;
-        $music_file->user_name = $request->user_name;
         $music_file->save();
     }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function musicFileDestroy(Request $request)
+    {
+        // 対象モデル取得
+        $music_file = MusicFile::find($request->id);
+        // s3のmp3ファイル削除
+        $music_file_file_name = $music_file->music_file;
+        Storage::disk('s3')->delete('musicFiles/', $music_file_file_name);
+        // s3の音声ファイルのカバー画像削除
+        $cover_image_file_name = $music_file->cover_image;
+        Storage::disk('s3')->delete('images/', $cover_image_file_name);
+        $music_file->delete();
+    }
 }
-
