@@ -34,7 +34,7 @@ class RegisterController extends Controller
         // $followCount = User::where('followed_user_id', $user->id)->get();
         $user_detail_page_data = DB::table('users')
                         ->where('users.id', '=', $user_id)
-                        ->join('music_files', 'music_files.user_id', '=', 'users.id')
+                        ->leftJoin('music_files', 'music_files.user_id', '=', 'users.id')
                         ->select(
                             'music_files.title',
                             'music_files.cover_image',
