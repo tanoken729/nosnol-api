@@ -12,14 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-// デフォルト
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
-
-// テスト
-Route::get('test', function() {
-    return response()->json(['name' => '山田太郎', 'gender' => '男','mail' => 'yamada@test.com']);
 });
 
 // ログイン
