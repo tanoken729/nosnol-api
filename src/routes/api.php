@@ -31,33 +31,33 @@ Route::group(["middleware" => "api"], function () {
     Route::post('/register', 'RegisterController@create');
 
     // トップページの音楽ファイル取得
-    Route::get('/musicFileData', 'MusicFileController@index');
+    Route::get('/musicFileList', 'MusicFileController@index');
 
     // 音楽ファイルアップロード
-    Route::post('/musicFileUpload', 'MusicFileController@musicFileUpload');
+    Route::post('/musicFile', 'MusicFileController@musicFileUpload');
 
     // フォロー（フォローアクション時）
-    Route::get('{followed_id}/{following_id}/getFollowInfo', 'FollowController@getFollowInfo');
+    Route::get('/followInfo/{followed_id}/{following_id}', 'FollowController@getFollowInfo');
     Route::post('/follow', 'FollowController@follow');
-    Route::get('{followed_id}/{following_id}/unfollow', 'FollowController@unfollow');
+    Route::get('/unfollow/{followed_id}/{following_id}', 'FollowController@unfollow');
 
     // いいね（いいねアクション時）
-    Route::get('{user_id}/{music_file_id}/getLikeInfo', 'LikeController@getLikeInfo');
+    Route::get('/likeInfo/{user_id}/{music_file_id}', 'LikeController@getLikeInfo');
     Route::post('/like', 'LikeController@like');
-    Route::get('{user_id}/{music_file_id}/unlike', 'LikeController@unlike');
+    Route::get('/unlike/{user_id}/{music_file_id}', 'LikeController@unlike');
 
     // コメント（コメントアクション時）
-    Route::get('{music_file_id}/getCommentInfo', 'CommentController@getCommentInfo');
+    Route::get('/commentInfo/{music_file_id}', 'CommentController@getCommentInfo');
     Route::post('/comment', 'CommentController@comment');
-    Route::get('{user_id}/{music_file_id}/uncomment', 'CommentController@uncomment');
+    Route::get('/uncomment/{user_id}/{music_file_id}', 'CommentController@uncomment');
 
     // ファイル詳細画面の情報取得（ファイル詳細初期表示時に実行される）
-    Route::get('{user_id}/{music_file_id}/{music_file_user_id}/musicDetailPageData', 'MusicFileController@musicDetailPageData');
+    Route::get('musicDetailPageData/{user_id}/{music_file_id}/{music_file_user_id}', 'MusicFileController@musicDetailPageData');
     // ユーザー詳細画面の情報取得
-    Route::get('{user_id}/userDetailPageData', 'RegisterController@userDetailPageData');
+    Route::get('userDetailPageData/{user_id}', 'RegisterController@userDetailPageData');
 
-    // 感情・ジャンル絞り込み、ファイル名検索（クエリパラメータで取得）
-    Route::get('musicFileFilter/emotion/genre/title', 'MusicFileController@musicFileFilter');
+    // ファイルタイトル検索、感情・ジャンル絞り込み（クエリパラメータで取得）
+    Route::get('searchMusicFile/emotion/genre/title', 'MusicFileController@musicFileFilter');
 
     // ログインユーザープロフィール編集画面の情報取得
     Route::get('loginUserProfileData/{user_id}', 'RegisterController@getLoginUserProfileData');
